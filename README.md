@@ -1,6 +1,5 @@
-# lil agents
-
-![lil agents](hero-thumbnail.png)
+# self-agent-in-house
+> AI Agent for Intel Mac (macOS 13.7.8+) & Apple Silicon
 
 Tiny AI companions that live on your macOS dock.
 
@@ -8,9 +7,7 @@ Tiny AI companions that live on your macOS dock.
 
 Supports **Claude Code**, **OpenAI Codex**, **GitHub Copilot**, and **Google Gemini** CLIs — switch between them from the menubar.
 
-**[Download for macOS](https://lilagents.xyz)** · [Website](https://lilagents.xyz)
-
-## features
+## Features
 
 - Animated characters rendered from transparent HEVC video
 - Click a character to chat with AI in a themed popover terminal
@@ -23,29 +20,31 @@ Supports **Claude Code**, **OpenAI Codex**, **GitHub Copilot**, and **Google Gem
 - First-run onboarding with a friendly welcome
 - Auto-updates via Sparkle
 
-## requirements
+## Requirements
 
-- macOS Sonoma (14.0+) — including Sequoia (15.x)
-- **Universal binary** — runs natively on both Apple Silicon and Intel Macs
+- macOS Ventura (13.0+) — tested on macOS 13.7.8 Intel (x86_64) & Apple Silicon
+- Universal binary support
 - At least one supported CLI installed:
   - [Claude Code](https://claude.ai/download) — `curl -fsSL https://claude.ai/install.sh | sh`
   - [OpenAI Codex](https://github.com/openai/codex) — `npm install -g @openai/codex`
   - [GitHub Copilot](https://github.com/github/copilot-cli) — `brew install copilot-cli`
   - [Google Gemini CLI](https://github.com/google-gemini/gemini-cli) — `npm install -g @google/gemini-cli`
 
-## building
+## Building
 
-Open `lil-agents.xcodeproj` in Xcode and hit run.
+Run the custom build script:
+```bash
+chmod +x build.sh
+./build.sh
+```
 
-## privacy
+Or open `lil-agents.xcodeproj` in Xcode and hit run.
 
-lil agents runs entirely on your Mac and sends no personal data anywhere.
+## Database & Backend
 
-- **Your data stays local.** The app plays bundled animations and calculates your dock size to position the characters. No project data, file paths, or personal information is collected or transmitted.
-- **AI providers.** Conversations are handled entirely by the CLI process you choose (Claude, Codex, Copilot, or Gemini) running locally. lil agents does not intercept, store, or transmit your chat content. Any data sent to the provider is governed by their respective terms and privacy policies.
-- **No accounts.** No login, no user database, no analytics in the app.
-- **Updates.** lil agents uses Sparkle to check for updates, which sends your app version and macOS version. Nothing else.
+Database migrations and schemas are available under `supabase/schema.sql`.
 
-## license
+## License
 
 MIT License. See [LICENSE](LICENSE) for details.
+
