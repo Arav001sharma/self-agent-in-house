@@ -60,19 +60,29 @@ class GeminiSession: AgentSession {
         let proc = Process()
         proc.executableURL = URL(fileURLWithPath: binaryPath)
 
-        // gemini --yolo -p "message" for agentic use
+        // gemini --yolo --skip-trust -p "message" for agentic use
         // --resume latest for subsequent turns
-        var args: [String] = ["--yolo", "-p", message]
+        var args: [String] = ["--yolo", "--skip-trust", "-p", message]
         if !isFirstTurn {
-            args = ["--yolo", "--resume", "latest", "-p", message]
+            args = ["--yolo", "--skip-trust", "--resume", "latest", "-p", message]
         }
         proc.arguments = args
 
         proc.currentDirectoryURL = FileManager.default.homeDirectoryForCurrentUser
-        proc.environment = ShellEnvironment.processEnvironment(extraPaths: [
+        var env = ShellEnvironment.processEnvironment(extraPaths: [
             FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".npm-global/bin").path,
             FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".local/bin").path
         ])
+        env["GEMINI_CLI_TRUST_WORKSPACE"] = "true"
+
+        // Auto-inject GEMINI_API_KEY from ~/.gemini/settings.json if present
+        let settingsURL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".gemini/settings.json")
+        if let data = try? Data(contentsOf: settingsURL),
+           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let apiKey = (json["apiKey"] ?? json["GEMINI_API_KEY"]) as? String, !apiKey.isEmpty {
+            env["GEMINI_API_KEY"] = apiKey
+        }
+        proc.environment = env
 
         let outPipe = Pipe()
         let errPipe = Pipe()

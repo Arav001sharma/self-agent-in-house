@@ -1,6 +1,20 @@
 import SwiftUI
 import AppKit
+#if canImport(Sparkle)
 import Sparkle
+#else
+public final class SPUStandardUpdaterController: NSObject {
+    public init(startingUpdater: Bool, updaterDelegate: Any?, userDriverDelegate: Any?) { super.init() }
+    @objc public func checkForUpdates(_ sender: Any?) {
+        let alert = NSAlert()
+        alert.messageText = "Lil' Agents"
+        alert.informativeText = "You are running the latest custom build."
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+}
+#endif
 
 @main
 struct LilAgentsApp: App {
